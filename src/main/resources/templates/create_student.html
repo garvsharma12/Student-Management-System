@@ -186,23 +186,29 @@
             </div>
         </div>
 
-        <form class="student-form" th:action="@{/students}" th:object="${student}" method="post">
+        <form class="student-form" th:action="@{/students}" th:object="${student}" method="post" novalidate>
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="firstName" class="form-label">First Name</label>
                     <input type="text" class="form-control" id="firstName" name="firstName"
                            placeholder="Enter first name"
-                           th:field="*{firstName}" required>
+                           th:field="*{firstName}"
+                           th:errorclass="is-invalid">
+                    <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="invalid-feedback d-block"></p>
                 </div>
                 <div class="col-md-6">
                     <label for="lastName" class="form-label">Last Name</label>
                     <input type="text" class="form-control" id="lastName" name="lastName"
-                           placeholder="Enter last name" th:field="*{lastName}" required>
+                           placeholder="Enter last name" th:field="*{lastName}"
+                           th:errorclass="is-invalid">
+                    <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="invalid-feedback d-block"></p>
                 </div>
                 <div class="col-12">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" name="email"
-                           placeholder="Enter email address" th:field="*{email}" required>
+                           placeholder="Enter email address" th:field="*{email}"
+                           th:errorclass="is-invalid">
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback d-block"></p>
                 </div>
             </div>
 

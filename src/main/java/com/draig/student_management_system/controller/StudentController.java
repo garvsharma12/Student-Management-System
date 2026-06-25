@@ -3,8 +3,12 @@ package com.draig.student_management_system.controller;
 import com.draig.student_management_system.dto.StudentDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.draig.student_management_system.service.StudentService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -28,7 +32,7 @@ public class StudentController {
 
     //add new student
     @GetMapping("/students/new")
-    public String newStudent(Model model) {
+    public String newStudent(Model model){
         //student model object to store student form data
         //StudentDto studentDto = new StudentDto();
         model.addAttribute("student", new StudentDto());
@@ -37,7 +41,12 @@ public class StudentController {
 
     // handler method to handle save student form submission request
     @PostMapping("/students")
-    public String saveStudent(@ModelAttribute("student") StudentDto student) {
+    public String saveStudent(@Valid @ModelAttribute("student") StudentDto student, BindingResult bindingResult,
+        Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("student", student);
+            return "create_student";
+        }
         studentService.createStudent(student);
         return "redirect:/students";
     }
