@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Student - Student Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <style>
+        :root {
+            --page-bg: #f4f7fb;
+            --panel-border: #dbe3ee;
+            --ink: #1f2937;
+            --muted: #64748b;
+        }
+
+        body {
+            min-height: 100vh;
+            padding-top: 72px;
+            background: var(--page-bg);
+            color: var(--ink);
+        }
+
+        .navbar {
+            box-shadow: 0 2px 12px rgba(15, 23, 42, .16);
+        }
+
+        .navbar-brand {
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+
+        .nav-link:hover {
+            color: #dbeafe !important;
+        }
+
+        .page-shell {
+            width: min(100%, 980px);
+            margin: 0 auto;
+            padding: 32px 16px 48px;
+        }
+
+        .page-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .page-heading h1 {
+            margin: 0;
+            font-size: clamp(1.75rem, 3vw, 2.35rem);
+            font-weight: 700;
+            letter-spacing: 0;
+        }
+
+        .page-heading p {
+            max-width: 560px;
+            margin: 8px 0 0;
+            color: var(--muted);
+        }
+
+        .form-panel {
+            overflow: hidden;
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 16px 38px rgba(15, 23, 42, .08);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 22px 24px;
+            border-bottom: 1px solid var(--panel-border);
+            background: #f8fafc;
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .panel-header span {
+            color: var(--muted);
+            font-size: .95rem;
+        }
+
+        .student-form {
+            padding: 24px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-control {
+            min-height: 48px;
+            border-color: #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 .2rem rgba(37, 99, 235, .14);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding-top: 8px;
+        }
+
+        .actions .btn {
+            min-width: 142px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 576px) {
+            .page-heading,
+            .panel-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .student-form,
+            .panel-header {
+                padding: 20px;
+            }
+
+            .actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Student Management System</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/students">View Students</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/students/new">Add Student</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="page-shell">
+    <div class="page-heading">
+        <div>
+            <h1>Edit Student</h1>
+            <p>Update the student record and save your changes.</p>
+        </div>
+        <a th:href="@{/students}" class="btn btn-outline-primary">Back to Students</a>
+    </div>
+
+    <section class="form-panel" aria-labelledby="studentFormTitle">
+        <div class="panel-header">
+            <div>
+                <h2 id="studentFormTitle">Student Details</h2>
+                <span>All fields are required.</span>
+            </div>
+        </div>
+
+        <form class="student-form" th:action="@{/students/{studentId}(studentId=${student.id})}"
+            th:object="${student}" method="post" novalidate>
+            <input type="hidden" th:field="*{id}" />
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName"
+                           placeholder="Enter first name"
+                           th:field="*{firstName}"
+                           th:errorclass="is-invalid">
+                    <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="invalid-feedback d-block"></p>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName"
+                           placeholder="Enter last name" th:field="*{lastName}"
+                           th:errorclass="is-invalid">
+                    <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="invalid-feedback d-block"></p>
+                </div>
+                <div class="col-12">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email"
+                           placeholder="Enter email address" th:field="*{email}"
+                           th:errorclass="is-invalid">
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback d-block"></p>
+                </div>
+            </div>
+
+            <div class="actions mt-4">
+                <button type="submit" class="btn btn-success">Update Student</button>
+                <a th:href="@{/students}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtXqVOKZ"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -83,6 +83,7 @@
     <!-- Main Content -->
     <div class="container-fluid">
         <div class="table-container">
+            <div th:if="${errorMessage}" class="alert alert-warning" role="alert" th:text="${errorMessage}"></div>
             <div class="row mb-4">
                 <div class="col-md-8">
                     <h2>Students List</h2>
@@ -114,12 +115,16 @@
                             <td th:text="${student.email}"></td>
                             <td>
                                 <a href="#" class="btn btn-sm btn-info text-white"
-                                    th:href="@{/students/{studentId}/edit(studentId={student.id})}">
+                                    th:href="@{/students/{studentId}/edit(studentId=${student.id})}">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
-                                <a href="#" class="btn btn-sm btn-danger">
+                                <form th:action="@{/students/{studentId}/delete(studentId=${student.id})}"
+                                      method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Delete this student?');">
                                     <i class="fas fa-trash"></i> Delete
-                                </a>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     </tbody>
@@ -138,4 +143,3 @@
             crossorigin="anonymous"></script>
 </body>
 </html>
-

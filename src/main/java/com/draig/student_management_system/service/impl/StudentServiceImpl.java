@@ -7,14 +7,13 @@ import com.draig.student_management_system.repository.StudentRepository;
 import com.draig.student_management_system.service.StudentService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
     public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -35,7 +34,26 @@ public class StudentServiceImpl implements StudentService {
     }
     @Override
     public StudentDto getStudentById(Long studentId) {
-        Student student = studentRepository.findById(studentId).get();
+        Student student = findStudent(studentId);
         return StudentMapper.mapToStudentDto(student);
+    }
+
+    @Override
+    public void updateStudent(Long studentId, StudentDto studentDto) {
+        Student student = findStudent(studentId);
+        student.setFirstName(studentDto.getFirstName());
+        student.setLastName(studentDto.getLastName());
+        student.setEmail(studentDto.getEmail());
+        studentRepository.save(student);
+    }
+
+    @Override
+    public void deleteStudent(Long studentId) {
+        studentRepository.delete(findStudent(studentId));
+    }
+
+    private Student findStudent(Long studentId) {
+        return studentRepository.findById(studentId)
+                .orElseThrow(() -> new StudentNotFoundException(studentId));
     }
 }
