@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
     <head>
@@ -113,7 +113,8 @@
                             <td th:text="${student.lastName}"></td>
                             <td th:text="${student.email}"></td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-info text-white">
+                                <a href="#" class="btn btn-sm btn-info text-white"
+                                    th:href="@{/students/{studentId}/edit(studentId={student.id})}">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                                 <a href="#" class="btn btn-sm btn-danger">
